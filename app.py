@@ -13,7 +13,7 @@ model = torch.hub.load('ultralytics/yolov5', 'custom', path=path)
 
 def yolo(im, size=640):
     g = (size / max(im.size))  # gain
-    im = im.resize((int(x * g) for x in im.size), Image.ANTIALIAS)  # resize
+    im = im.resize((int(x * g) for x in im.size), Image.LANCZOS) 
     results = model(im)  # inference
 
     # Save the annotated image to a temporary file
