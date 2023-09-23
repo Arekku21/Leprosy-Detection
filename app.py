@@ -1,6 +1,7 @@
 import gradio as gr
 import torch
 from PIL import Image
+import tempfile
 
 import torch
 
@@ -11,22 +12,17 @@ model = torch.hub.load('ultralytics/yolov5', 'custom', path=path)
 
 
 def yolo(im, size=640):
-
     g = (size / max(im.size))  # gain
-
     im = im.resize((int(x * g) for x in im.size), Image.ANTIALIAS)  # resize
-
     results = model(im)  # inference
 
-    # results.render()  # updates results.imgs with boxes and labels
+    # Save the annotated image to a temporary file
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as temp_file:
+        annotated_image_path = temp_file.name
+        results[0].save(annotated_image_path)  # Save the annotated image
 
-    # return Image.fromarray(results.imgs[0])
-
-    # Retrieve the annotated image from the results (modify this based on your model's output structure)
-    annotated_image = results.render()[0] 
-
-    # Return the annotated image
-    return Image.fromarray(annotated_image)
+    # Return the path to the annotated image file
+    return annotated_image_path
 
 inputs = gr.inputs.Image(type='pil', label="Original Image")
 outputs = gr.outputs.Image(type="filepath", label="Output Image")
