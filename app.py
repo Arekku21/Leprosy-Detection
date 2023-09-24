@@ -105,13 +105,11 @@ def labels_image(image_path):
 
     array_model_confidence = []
 
-    print(array_results)
-
     num_lep = 0
     confidence_lep = 0
 
     num_non_lep = 0
-    confidence_non_lep = 0 
+    confidence_non_lep = 0
 
     for item in array_results:
         if item[6] == "Lep":
@@ -128,7 +126,6 @@ def labels_image(image_path):
       labels['Non Leprosy'] = 0.10
       labels['Other'] = 0.80
     else:
-
       if num_lep == 0:
         confidence_non_lep = round(confidence_non_lep / num_non_lep,2)
         labels['Leprosy'] = round(1 - confidence_non_lep,2)
@@ -139,6 +136,21 @@ def labels_image(image_path):
         confidence_lep = round(confidence_lep / num_lep,2)
         labels['Leprosy'] = confidence_lep
         labels['Non Leprosy'] = round(1 - confidence_lep,2)
+        labels['Other'] = 0
+      
+      else:
+        confidence_non_lep = round(confidence_non_lep / num_non_lep,2)
+        confidence_lep = round(confidence_lep / num_lep,2)
+
+        # Calculate the sum of the percentages
+        percentage_sum = confidence_non_lep + confidence_lep
+
+        # Normalize and express as percentages
+        normalized_percentage1 = (confidence_lep / percentage_sum)
+        normalized_percentage2 = (confidence_non_lep / percentage_sum)
+
+        labels['Leprosy'] = round(normalized_percentage1,2)
+        labels['Non Leprosy'] = round(normalized_percentage2,2)
         labels['Other'] = 0
 
     return labels
