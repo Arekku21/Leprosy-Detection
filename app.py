@@ -37,7 +37,7 @@ for i, url in enumerate(file_urls):
             f"image_{i}.jpg"
         )
 
-path = "/content/drive/MyDrive/leprosy_dataset/dataset/yolov5/runs/train/results_2/weights/best.pt"
+path = "obj.pt"
 model = torch.hub.load('ultralytics/yolov5', 'custom', path=path, force_reload=True)
 img_path  = [['image_0.jpg'], ['image_1.jpg'],['image_2.jpg'],['image_3.jpg']]
 video_path = [['video.mp4']]
