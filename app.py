@@ -122,40 +122,40 @@ def labels_image(image_path):
     labels = {}
 
     if num_lep == 0 and num_non_lep == 0:
-      labels['Leprosy'] = 0.10
-      labels['Non Leprosy'] = 0.10
-      labels['Other'] = 0.80
+      # labels['Leprosy'] = 0.10
+      # labels['Non Leprosy'] = 0.10
+      labels['Other'] = 1
     else:
       if num_lep == 0:
         confidence_non_lep = round(confidence_non_lep / num_non_lep,2)
-        confidence_lep = 0
+        # confidence_lep = 0
 
-        # Calculate the sum of the percentages
-        percentage_sum = confidence_non_lep + confidence_lep
+        # # Calculate the sum of the percentages
+        # percentage_sum = confidence_non_lep + confidence_lep
 
-        # Normalize and express as percentages
-        normalized_percentage1 = (confidence_lep / percentage_sum)
-        normalized_percentage2 = (confidence_non_lep / percentage_sum)
+        # # Normalize and express as percentages
+        # normalized_percentage1 = (confidence_lep / percentage_sum)
+        # normalized_percentage2 = (confidence_non_lep / percentage_sum)
 
-        labels['Leprosy'] = round(normalized_percentage1,2)
-        labels['Non Leprosy'] = round(normalized_percentage2,2)
-        labels['Other'] = 0
+        # labels['Leprosy'] = round(normalized_percentage1,2)
+        labels['Non Leprosy'] = confidence_non_lep
+        # labels['Other'] = 0
 
 
       elif num_non_lep == 0:
         confidence_lep = round(confidence_lep / num_lep,2)
-        confidence_non_lep = 0
+        # confidence_non_lep = 0
 
-        # Calculate the sum of the percentages
-        percentage_sum = confidence_non_lep + confidence_lep
+        # # Calculate the sum of the percentages
+        # percentage_sum = confidence_non_lep + confidence_lep
 
-        # Normalize and express as percentages
-        normalized_percentage1 = (confidence_lep / percentage_sum)
-        normalized_percentage2 = (confidence_non_lep / percentage_sum)
+        # # Normalize and express as percentages
+        # normalized_percentage1 = (confidence_lep / percentage_sum)
+        # normalized_percentage2 = (confidence_non_lep / percentage_sum)
 
-        labels['Leprosy'] = round(normalized_percentage1,2)
-        labels['Non Leprosy'] = round(normalized_percentage2,2)
-        labels['Other'] = 0
+        labels['Leprosy'] = confidence_lep
+        # labels['Non Leprosy'] = round(normalized_percentage2,2)
+        # labels['Other'] = 0
       
       else:
         confidence_non_lep = round(confidence_non_lep / num_non_lep,2)
