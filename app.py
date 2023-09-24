@@ -90,7 +90,73 @@ interface_image = gr.Interface(
     cache_examples=False,
 )
 
+def labels_image(image_path):
+    image = cv2.imread(image_path)
 
+    results = model(image_path)
+
+    pandas_result = results.pandas().xyxy[0]
+
+    array_results = pandas_result.to_numpy()
+
+    array_results = array_results.tolist()
+
+    array_model_result = []
+
+    array_model_confidence = []
+
+    print(array_results)
+
+    num_lep = 0
+    confidence_lep = 0
+
+    num_non_lep = 0
+    confidence_non_lep = 0 
+
+    for item in array_results:
+        if item[6] == "Lep":
+          num_lep+=1
+          confidence_lep += item[4]
+        elif item[6] == "Non Lep":
+          num_non_lep+=1
+          confidence_non_lep += item[4]
+
+    labels = {}
+
+    if num_lep == 0 and num_non_lep == 0:
+      labels['Leprosy'] = 0.10
+      labels['Non Leprosy'] = 0.10
+      labels['Other'] = 0.80
+    else:
+
+      if num_lep == 0:
+        confidence_non_lep = round(confidence_non_lep / num_non_lep,2)
+        labels['Leprosy'] = round(1 - confidence_non_lep,2)
+        labels['Non Leprosy'] = confidence_non_lep
+        labels['Other'] = 0
+
+      elif num_non_lep == 0:
+        confidence_lep = round(confidence_lep / num_lep,2)
+        labels['Leprosy'] = confidence_lep
+        labels['Non Leprosy'] = round(1 - confidence_lep,2)
+        labels['Other'] = 0
+
+    return labels
+
+inputs_image = [
+    gr.components.Image(type="filepath", label="Input Image"),
+]
+outputs_label = [
+    gr.outputs.Label(type="label", label="Output Labels"),
+]
+interface_label = gr.Interface(
+    fn=labels_image,
+    inputs=inputs_image,
+    outputs=outputs_label,
+    title="Leprosy detection",
+    examples=img_path,
+    cache_examples=False,
+)
 
 # def show_preds_video(video_path):
 #     cap = cv2.VideoCapture(video_path)
@@ -128,7 +194,13 @@ interface_image = gr.Interface(
 # )
 
 
+# gr.TabbedInterface(
+#     [interface_image],
+#     tab_names=['Image inference']
+# ).queue().launch()
+
+
 gr.TabbedInterface(
-    [interface_image],
-    tab_names=['Image inference']
+    [interface_image,interface_label],
+    tab_names=['Image inference','Label Inference']
 ).queue().launch()
