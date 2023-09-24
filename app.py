@@ -53,15 +53,16 @@ def show_preds_image(image_path):
 
     array_results = array_results.tolist()
 
-    print(array_results)
-
     array_bounding_box= []
 
     array_model_result = []
 
+    array_model_confidence = []
+
     for item in array_results:
         array_bounding_box.append([item[0],item[1],item[2],item[3]])
         array_model_result.append(item[6])
+        array_model_confidence.append(str(round(item[4],1)*100))
 
     for numbers in range(len(array_model_result)):
       x1, y1 = int(math.floor(array_bounding_box[numbers][0])), int(math.floor(array_bounding_box[numbers][1]))  # top-left corner
@@ -69,8 +70,7 @@ def show_preds_image(image_path):
 
       # draw a rectangle over the image using the bounding box coordinates
       cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0,255), 1)
-      cv2.putText(image, array_model_result[numbers], (x1, y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
-
+      cv2.putText(image, array_model_result[numbers] + " " +array_model_confidence[numbers] + "%", (x1, y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
 
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
