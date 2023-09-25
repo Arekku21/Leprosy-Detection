@@ -1,5 +1,3 @@
-
-
 import gradio as gr
 import cv2
 import requests
@@ -68,9 +66,15 @@ def show_preds_image(image_path):
       x1, y1 = int(math.floor(array_bounding_box[numbers][0])), int(math.floor(array_bounding_box[numbers][1]))  # top-left corner
       x2, y2 = int(math.floor(array_bounding_box[numbers][2])), int(math.floor(array_bounding_box[numbers][3]))  # bottom-right corner
 
-      # draw a rectangle over the image using the bounding box coordinates
-      cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0,255), 1)
-      cv2.putText(image, array_model_result[numbers] + " " +array_model_confidence[numbers] + "%", (x1, y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
+      if array_model_result[numbers] == "Lep":
+        # draw a rectangle over the image using the bounding box coordinates
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0,255), 1)
+        cv2.putText(image, array_model_result[numbers] + " " +array_model_confidence[numbers] + "%", (x1, y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
+
+      elif array_model_result[numbers] == "Non Lep":
+        # draw a rectangle over the image using the bounding box coordinates
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255,0), 1)
+        cv2.putText(image, array_model_result[numbers] + " " +array_model_confidence[numbers] + "%", (x1, y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1)
 
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
