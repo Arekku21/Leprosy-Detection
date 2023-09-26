@@ -41,7 +41,7 @@ for i, url in enumerate(file_urls):
 
 path = "obj.pt"
 model = torch.hub.load('ultralytics/yolov5', 'custom', path=path, force_reload=True)
-img_path  = [['image_0.jpg'], ['image_1.jpg'],['image_2.jpg'],['image_3.jpg']]
+img_path  = [['image_0.jpg'], ['image_1.jpg'],['image_2.jpg'],['image_3.jpg'],['image_4.jpg'],['image_5.jpg'],]
 video_path = [['video.mp4']]
 
 def show_preds_image_and_labels(image_path):
