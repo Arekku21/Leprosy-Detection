@@ -136,7 +136,7 @@ def show_preds_image_and_labels(image_path):
 
       #incase of a tie in quantity we compare the mean probability of each
       confidence_lep = round(confidence_lep/num_lep,2)
-      confidence_non_lep = round(confidence_lep/num_non_lep,2)
+      confidence_non_lep = round(confidence_non_lep/num_non_lep,2)
 
       if confidence_lep > confidence_non_lep:
         labels["Leprosy"] = confidence_lep
