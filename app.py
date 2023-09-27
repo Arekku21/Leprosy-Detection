@@ -122,32 +122,35 @@ def show_preds_image_and_labels(image_path):
 
     #if num_lep is more than non lep
     if num_lep > num_non_lep:
-      labels["Leprosy"] = round(confidence_lep/num_lep,2)
+        labels["Leprosy"] = round(confidence_lep/num_lep,2)
+        labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2) 
     #if num_non_lep is more than lep
     elif num_lep < num_non_lep:
-      labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2)
+        labels["Leprosy"] = round(confidence_lep/num_lep,2)
+        labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2)
 
     #if num_non_lep and num_lep is equal but they are equal coz they are both 0
     elif num_lep == num_non_lep and num_lep == 0:
-      labels["Others"] = 0.9
+        labels["Others"] = 0.9
 
     #if num_non_lep and num_lep is equal but they are equal coz they are both 0
     elif num_lep == num_non_lep:
 
-      #incase of a tie in quantity we compare the mean probability of each
-      confidence_lep = round(confidence_lep/num_lep,2)
-      confidence_non_lep = round(confidence_non_lep/num_non_lep,2)
-
-      if confidence_lep > confidence_non_lep:
-        labels["Leprosy"] = confidence_lep
-
-      elif confidence_lep < confidence_non_lep:
-        labels["Non Leprosy"] = confidence_non_lep
-
-      elif confidence_lep == confidence_non_lep:
+        #incase of a tie in quantity we compare the mean probability of each
+        confidence_lep = round(confidence_lep/num_lep,2)
+        confidence_non_lep = round(confidence_non_lep/num_non_lep,2)
+        
+        if confidence_lep > confidence_non_lep:
         labels["Leprosy"] = confidence_lep
         labels["Non Leprosy"] = confidence_non_lep
-
+        
+        elif confidence_lep < confidence_non_lep:
+        labels["Leprosy"] = confidence_lep
+        labels["Non Leprosy"] = confidence_non_lep
+        
+        elif confidence_lep == confidence_non_lep:
+        labels["Leprosy"] = confidence_lep
+        labels["Non Leprosy"] = confidence_non_lep
 
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB),labels
 
