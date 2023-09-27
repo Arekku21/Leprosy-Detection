@@ -123,12 +123,21 @@ def show_preds_image_and_labels(image_path):
     #if num_lep is more than non lep
     if num_lep > num_non_lep:
         labels["Leprosy"] = round(confidence_lep/num_lep,2)
-        labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2) 
+
+        if num_non_lep != 0:
+            labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2) 
+        else:
+            labels["Non Leprosy"] = 0.0 
+ 
     #if num_non_lep is more than lep
     elif num_lep < num_non_lep:
-        labels["Leprosy"] = round(confidence_lep/num_lep,2)
         labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2)
 
+        if num_lep != 0:
+            labels["Leprosy"] = round(confidence_lep/num_lep,2)
+        else:
+            labels["Leprosy"] = 0.0 
+        
     #if num_non_lep and num_lep is equal but they are equal coz they are both 0
     elif num_lep == num_non_lep and num_lep == 0:
         labels["Others"] = 0.9
