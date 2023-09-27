@@ -141,16 +141,16 @@ def show_preds_image_and_labels(image_path):
         confidence_non_lep = round(confidence_non_lep/num_non_lep,2)
         
         if confidence_lep > confidence_non_lep:
-        labels["Leprosy"] = confidence_lep
-        labels["Non Leprosy"] = confidence_non_lep
+            labels["Leprosy"] = confidence_lep
+            labels["Non Leprosy"] = confidence_non_lep
         
         elif confidence_lep < confidence_non_lep:
-        labels["Leprosy"] = confidence_lep
-        labels["Non Leprosy"] = confidence_non_lep
+            labels["Leprosy"] = confidence_lep
+            labels["Non Leprosy"] = confidence_non_lep
         
         elif confidence_lep == confidence_non_lep:
-        labels["Leprosy"] = confidence_lep
-        labels["Non Leprosy"] = confidence_non_lep
+            labels["Leprosy"] = confidence_lep
+            labels["Non Leprosy"] = confidence_non_lep
 
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB),labels
 
