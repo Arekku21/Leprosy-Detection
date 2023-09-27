@@ -56,7 +56,7 @@ def show_preds_image_and_labels(image_path):
     array_results = array_results.tolist()
 
     #print raw results
-    print("Raw results: ", array_results)
+    print("\nRaw results: ", array_results)
 
     array_bounding_box= []
 
@@ -127,8 +127,20 @@ def show_preds_image_and_labels(image_path):
         if num_non_lep != 0:
             labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2) 
         else:
-            labels["Non Leprosy"] = 0.0 
- 
+            lower_score_lep_num = 0
+            lower_score_lep_conf = 0.0
+            
+            for results_index in range(len(array_model_confidence)):
+                if array_model_result[results_index] == "Lep":
+                  if float(array_model_confidence[results_index]) < 45.0:
+                      lower_score_lep_num+=1
+                      lower_score_lep_conf+=float(array_model_confidence[results_index])
+
+            if lower_score_lep_num != 0:
+                labels["Non Leprosy"] = round((lower_score_lep_conf/lower_score_lep_num)/100,2) 
+            else:
+                labels["Non Leprosy"] = 0.0 
+                        
     #if num_non_lep is more than lep
     elif num_lep < num_non_lep:
         labels["Non Leprosy"] = round(confidence_non_lep/num_non_lep,2)
@@ -179,47 +191,6 @@ interface_image = gr.Interface(
     cache_examples=False,
 )
     
-# def show_preds_video(video_path):
-#     cap = cv2.VideoCapture(video_path)
-#     while(cap.isOpened()):
-#         ret, frame = cap.read()
-#         if ret:
-#             frame_copy = frame.copy()
-#             outputs = model.predict(source=frame)
-#             results = outputs[0].cpu().numpy()
-#             for i, det in enumerate(results.boxes.xyxy):
-#                 cv2.rectangle(
-#                     frame_copy,
-#                     (int(det[0]), int(det[1])),
-#                     (int(det[2]), int(det[3])),
-#                     color=(0, 0, 255),
-#                     thickness=2,
-#                     lineType=cv2.LINE_AA
-#                 )
-#             yield cv2.cvtColor(frame_copy, cv2.COLOR_BGR2RGB)
-
-# inputs_video = [
-#     gr.components.Video(type="filepath", label="Input Video"),
-
-# ]
-# outputs_video = [
-#     gr.components.Image(type="numpy", label="Output Image"),
-# ]
-# interface_video = gr.Interface(
-#     fn=show_preds_video,
-#     inputs=inputs_video,
-#     outputs=outputs_video,
-#     title="Pothole detector",
-#     examples=video_path,
-#     cache_examples=False,
-# )
-
-
-# gr.TabbedInterface(
-#     [interface_image],
-#     tab_names=['Image inference']
-# ).queue().launch()
-
 gr.TabbedInterface(
     [interface_image],
     tab_names=['Image inference']
